@@ -1,0 +1,26 @@
+{
+  "name": "effect-docs-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@8.15.6+sha256.01c01eeb990e379b31ef19c03e9d06a14afa5250b82e81303f88721c99ff2e6f",
+  "devDependencies": {
+    "@effect/ai": "^0.19.4",
+    "@effect/cluster": "^0.39.5",
+    "@effect/experimental": "^0.49.2",
+    "@effect/language-service": "^0.21.8",
+    "@effect/platform": "^0.85.2",
+    "@effect/platform-node": "^0.86.5",
+    "effect": "^3.16.8",
+    "prettier": "^3.6.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
