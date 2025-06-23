@@ -4,7 +4,7 @@ import { Schema } from "effect"
 // Example 1: Basic VariantSchema setup
 const { Struct, Field, Class, extract } = VariantSchema.make({
   variants: ["api", "database"],
-  defaultVariant: "api"
+  defaultVariant: "api",
 })
 
 // Simple user model with different representations
@@ -13,13 +13,13 @@ const UserModel = Struct({
   name: Schema.String,
   // Password is only needed for database operations
   password: Field({
-    database: Schema.String
+    database: Schema.String,
   }),
   // Email is formatted differently for API vs database
   email: Field({
     api: Schema.String.pipe(Schema.pattern(/^\S+@\S+$/)),
-    database: Schema.String
-  })
+    database: Schema.String,
+  }),
 })
 
 // Extract different variants
@@ -34,15 +34,21 @@ console.log("Database User schema includes:", Object.keys(DatabaseUser.fields))
 const apiUserData = {
   id: 1,
   name: "John Doe",
-  email: "john@example.com"
+  email: "john@example.com",
 }
 
 const databaseUserData = {
   id: 1,
   name: "John Doe",
   email: "john@example.com",
-  password: "hashed-password"
+  password: "hashed-password",
 }
 
-console.log("API user validation:", Schema.decodeUnknownSync(ApiUser)(apiUserData))
-console.log("Database user validation:", Schema.decodeUnknownSync(DatabaseUser)(databaseUserData))
+console.log(
+  "API user validation:",
+  Schema.decodeUnknownSync(ApiUser)(apiUserData),
+)
+console.log(
+  "Database user validation:",
+  Schema.decodeUnknownSync(DatabaseUser)(databaseUserData),
+)

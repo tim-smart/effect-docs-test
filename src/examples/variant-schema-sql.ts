@@ -4,7 +4,7 @@ import { Schema } from "effect"
 // Example 5: SQL Model Pattern (inspired by @effect/sql)
 const { Class, Field, FieldOnly, FieldExcept } = VariantSchema.make({
   variants: ["select", "insert", "update", "json", "jsonCreate", "jsonUpdate"],
-  defaultVariant: "select"
+  defaultVariant: "select",
 })
 
 // Simulate some SQL Model utilities
@@ -12,45 +12,45 @@ const Generated = <S extends Schema.Schema.Any>(schema: S) =>
   Field({
     select: schema,
     update: schema,
-    json: schema
+    json: schema,
   })
 
 const Sensitive = <S extends Schema.Schema.Any>(schema: S) =>
   Field({
     select: schema,
     insert: schema,
-    update: schema
+    update: schema,
   })
 
 const DateTimeInsert = Field({
   select: Schema.String,
   insert: Schema.String, // Would be auto-generated in real implementation
-  json: Schema.String
+  json: Schema.String,
 })
 
 const DateTimeUpdate = Field({
   select: Schema.String,
   insert: Schema.String,
   update: Schema.String, // Would be auto-updated in real implementation
-  json: Schema.String
+  json: Schema.String,
 })
 
 // User model following SQL Model pattern
 class User extends Class<User>("User")({
   // Auto-generated ID
   id: Generated(Schema.Number.pipe(Schema.brand("UserId"))),
-  
+
   // Basic user info
   email: Schema.String.pipe(Schema.pattern(/^\S+@\S+$/)),
   username: Schema.NonEmptyString,
-  
+
   // Sensitive data - not exposed in JSON variants
   passwordHash: Sensitive(Schema.String),
-  
+
   // Optional profile fields
   firstName: Schema.String.pipe(Schema.optional),
   lastName: Schema.String.pipe(Schema.optional),
-  
+
   // JSON field - different representations
   preferences: Field({
     select: Schema.String, // Stored as JSON string in DB
@@ -59,23 +59,23 @@ class User extends Class<User>("User")({
     json: Schema.Struct({
       theme: Schema.Literal("light", "dark"),
       notifications: Schema.Boolean,
-      language: Schema.String
+      language: Schema.String,
     }),
     jsonCreate: Schema.Struct({
       theme: Schema.Literal("light", "dark"),
       notifications: Schema.Boolean,
-      language: Schema.String
+      language: Schema.String,
     }),
     jsonUpdate: Schema.Struct({
       theme: Schema.Literal("light", "dark"),
       notifications: Schema.Boolean,
-      language: Schema.String
-    })
+      language: Schema.String,
+    }),
   }),
-  
+
   // Auto-managed timestamps
   createdAt: DateTimeInsert,
-  updatedAt: DateTimeUpdate
+  updatedAt: DateTimeUpdate,
 }) {}
 
 // Demonstrate the different variants
@@ -113,10 +113,10 @@ const insertUserData = {
   preferences: JSON.stringify({
     theme: "dark",
     notifications: true,
-    language: "en"
+    language: "en",
   }),
   createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString()
+  updatedAt: new Date().toISOString(),
 }
 
 const jsonCreateUserData = {
@@ -126,13 +126,15 @@ const jsonCreateUserData = {
   preferences: {
     theme: "dark" as const,
     notifications: true,
-    language: "en"
-  }
+    language: "en",
+  },
 }
 
 console.log("\n=== Usage Examples ===")
 console.log("Database insert data:", Object.keys(insertUserData))
 console.log("JSON API create data:", Object.keys(jsonCreateUserData))
-console.log("Password handling: Included in DB operations, excluded from JSON APIs")
+console.log(
+  "Password handling: Included in DB operations, excluded from JSON APIs",
+)
 
 export { User, insertUserData, jsonCreateUserData }
